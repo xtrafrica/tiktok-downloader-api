@@ -16,16 +16,21 @@ app.get('/api/download', async (req, res) => {
     }
 
     try {
-        const response = await axios.get(`https://api.tiklydown.me/api/download?url=${encodeURIComponent(url)}`);
+        const response = await axios.get('https://www.tikwm.com/api/', {
+            params: {
+                url: url
+            }
+        });
+
         const data = response.data;
 
-        if (data && data.success) {
+        if (data && data.data && data.data.play) {
             res.json({
                 success: true,
-                downloadUrl: data.video_no_watermark
+                downloadUrl: data.data.play
             });
         } else {
-            res.json({ success: false, message: 'Failed to download video' });
+            res.json({ success: false, message: 'Failed to fetch video. Check if the TikTok link is correct.' });
         }
     } catch (error) {
         console.error(error.message);
